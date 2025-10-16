@@ -1,0 +1,40 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "type_ml",
+      "camelcase": "TypeML",
+      "title": "TypeML",
+      "scope": "source.type_ml",
+      "file-types": [
+        "tmd",
+        "tml"
+      ],
+      "injection-regex": "^type_ml$",
+      "class-name": "TreeSitterTypeMl"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "TypeMl grammar for tree-sitter",
+    "authors": [
+      {
+        "name": "Irisu",
+        "email": "mrapacheee@gmail.com"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/MrApache/tree-sitter-type_ml"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}
