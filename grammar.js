@@ -10,153 +10,143 @@
 module.exports = grammar({
   name: "type_ml",
 
-  extras: ($) => [/[\s\t\r\n]/, $.comment_multi, $.line_comment],
+  extras: ($) => [/[\s\t\r\n]/, $.comment_multi, $.comment_line],
 
-  conflicts: ($) => [
-    // Возможные конфликты можно добавить позже
-  ],
+  conflicts: ($) => [],
 
   rules: {
-    // TODO: add the actual grammar rules
     source_file: ($) =>
-      seq(repeat($.directive), repeat($.element), repeat($.impls)),
+      repeat(choice($.directive, $.struct_impl, $.expr_impl, $.element)),
 
-    // Комментарии
     comment_multi: ($) =>
       token(seq("/*", repeat(choice(/[^*]/, seq("*", /[^\/]/))), "*/")),
 
-    line_comment: ($) => token(seq("//", repeat(/[^\n]/), /\n?/)),
+    comment_line: ($) => token(seq("//", repeat(/[^\n]/), /\n?/)),
 
-    // Идентификаторы
-    ident: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
-
-    ns_ident: ($) => seq($.ident, repeat(seq("::", $.ident))),
-
-    alias: ($) => seq("@", $.ident),
-
-    // Литералы
     integer: ($) => /-?[0-9]+/,
     float: ($) => /-?[0-9]+\.[0-9]*/,
-    number: ($) => choice($.float, $.integer),
-
     boolean: ($) => choice("true", "false"),
+    string: ($) => seq('"', /[^"]*/, '"'),
+    enum: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
+    custom_enum: ($) => /[^"{}\[\],\/=> \s\t\r\n]+/,
 
-    string: ($) => seq('"', repeat(choice(/[^"\\]/, /\\./)), '"'),
-
-    enum_val: ($) => choice($.ident, $.custom),
-
-    custom: ($) => /[^\s{}\[\],=>\/"][^\s{}\[\],=>\/"]*/,
-
-    // Структуры
-    structure: ($) => seq("{{", choice($.struct_fields, $.impl_ref), "}}"),
-
-    struct_fields: ($) =>
-      seq($.struct_field, repeat(seq(",", optional($.struct_field)))),
-
-    struct_field: ($) =>
-      seq(field("name", $.ident), ":", field("value", $.field_value)),
-
-    field_value: ($) => choice($.boolean, $.enum_val, $.string),
-
-    // Директивы
-    directive_content: ($) => repeat1(/[^>]/),
-
-    //directive: ($) =>
-    //  seq(
-    //    "#",
-    //    field("name", $.ident),
-    //    optional(seq("<", field("content", $.directive_content), ">")),
-    //  ),
     directive: ($) =>
       prec.right(
         1,
         seq(
           "#",
-          field("name", $.ident),
-          optional(seq("<", field("content", $.directive_content), ">")),
+          field("name", /[a-zA-Z0-9_]+/),
+          optional(choice($.absolute_path, $.relative_path, $.constant)),
+          "\n",
         ),
       ),
 
-    // Элементы
-    element: ($) => choice($.empty_tag, $.tag),
+    absolute_path: ($) => seq("<", /[^>]+/, ">"),
+    relative_path: ($) => seq('"', /[^"]+/, '"'),
+    constant: ($) => /[a-zA-Z0-9_]+/,
 
+    bind_operator: ($) => seq("-", ">"),
+
+    full_type_identifier: ($) =>
+      seq(repeat(seq(/[a-zA-Z_][a-zA-Z0-9_]*/, "::")), $.type_identifier),
+    type_identifier: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
+    field_identifier: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
+
+    struct_field_value: ($) =>
+      choice($.boolean, $.float, $.integer, $.string, $.enum, $.custom_enum),
+    struct_field: ($) => seq($.field_identifier, ":", $.struct_field_value),
+    struct_fields: ($) =>
+      seq($.struct_field, repeat(seq(",", $.struct_field)), optional(",")),
+    struct_impl_keyword: ($) => seq("$", "struct"),
+    struct_impl: ($) =>
+      seq(
+        $.struct_impl_keyword,
+        $.type_identifier,
+        $.bind_operator,
+        $.full_type_identifier,
+        "{",
+        field("fields", $.struct_fields),
+        "}",
+      ),
+
+    list: ($) =>
+      seq(
+        "[",
+        $.expr_field_value,
+        repeat(seq(",", $.expr_field_value)),
+        optional(","),
+        "]",
+      ),
+    expr_field_value: ($) =>
+      choice(
+        $.boolean,
+        $.float,
+        $.integer,
+        $.string,
+        $.enum,
+        $.custom_enum,
+        $.list,
+      ),
+    expr_field: ($) => seq($.field_identifier, ":", $.expr_field_value),
+    expr_fields: ($) =>
+      seq($.expr_field, repeat(seq(",", $.expr_field)), optional(",")),
+    expr_impl_keyword: ($) => seq("$", "expr"),
+    expr_impl: ($) =>
+      seq(
+        $.expr_impl_keyword,
+        $.type_identifier,
+        $.bind_operator,
+        $.full_type_identifier,
+        "{",
+        optional(field("fields", $.expr_fields)),
+        "}",
+      ),
+
+    impl_ref: ($) => seq("$", $.type_identifier),
+    expr: ($) =>
+      seq(
+        "{",
+        choice(seq($.full_type_identifier, $.expr_fields), $.impl_ref),
+        "}",
+      ),
+    struct: ($) => seq("{{", choice($.struct_fields, $.impl_ref), "}}"),
+
+    attribute_value: ($) =>
+      choice(
+        $.boolean,
+        $.float,
+        $.integer,
+        $.string,
+        $.enum,
+        $.custom_enum,
+        $.expr,
+        $.struct,
+      ),
+    attribute: ($) => seq($.field_identifier, "=", $.attribute_value),
+
+    alias: ($) => seq("@", $.type_identifier),
     empty_tag: ($) =>
       seq(
         "<",
-        field("name", $.ns_ident),
-        optional(field("alias", $.alias)),
-        repeat(field("attribute", $.attribute)),
+        $.full_type_identifier,
+        optional($.alias),
+        repeat($.attribute),
         "/>",
       ),
 
     tag: ($) =>
       seq(
         "<",
-        field("name", $.ns_ident),
-        optional(field("alias", $.alias)),
-        repeat(field("attribute", $.attribute)),
+        $.full_type_identifier,
+        optional($.alias),
+        repeat($.attribute),
         ">",
-        repeat(field("children", $.element)),
+        repeat($.element),
         "</",
-        field("end_name", $.ns_ident),
+        $.full_type_identifier,
         ">",
       ),
 
-    // Атрибуты
-    attr_value: ($) =>
-      choice($.boolean, $.enum_val, $.string, $.expression, $.structure),
-
-    attribute: ($) =>
-      seq(field("name", $.ident), "=", field("value", $.attr_value)),
-
-    // Выражения
-    expression: ($) =>
-      seq(
-        "{",
-        choice(
-          seq(field("function", $.ns_ident), field("args", $.expr_args)),
-          field("impl_ref", $.impl_ref),
-        ),
-        "}",
-      ),
-
-    expr_args: ($) => seq($.expr_arg, repeat(seq(",", optional($.expr_arg)))),
-
-    expr_arg: ($) =>
-      seq(field("name", $.ident), ":", field("value", $.arg_val)),
-
-    arg_val: ($) => choice($.boolean, $.enum_val, $.string, $.list_val),
-
-    list_val: ($) =>
-      seq("[", optional(seq($.arg_val, repeat(seq(",", $.arg_val)))), "]"),
-
-    // Имплементации
-    impl_ref: ($) => seq("$", $.ident),
-
-    impls: ($) => choice($.expr_impl, $.struct_impl),
-
-    expr_impl: ($) =>
-      seq(
-        "$",
-        "expr",
-        field("name", $.ident),
-        "->",
-        field("target", $.ns_ident),
-        "{",
-        field("args", $.expr_args),
-        "}",
-      ),
-
-    struct_impl: ($) =>
-      seq(
-        "$",
-        "struct",
-        field("name", $.ident),
-        "->",
-        field("target", $.ns_ident),
-        "{",
-        field("fields", $.struct_fields),
-        "}",
-      ),
+    element: ($) => choice($.empty_tag, $.tag),
   },
 });

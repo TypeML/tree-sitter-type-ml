@@ -6,18 +6,15 @@
       "camelcase": "TypeML",
       "title": "TypeML",
       "scope": "source.type_ml",
-      "file-types": [
-        "tmd",
-        "tml"
-      ],
+      "file-types": ["tml"],
       "injection-regex": "^type_ml$",
-      "class-name": "TreeSitterTypeMl"
+      "class-name": "TreeSitterTypeML"
     }
   ],
   "metadata": {
     "version": "0.1.0",
-    "license": "MIT",
-    "description": "TypeMl grammar for tree-sitter",
+    "license": "Apache-2.0",
+    "description": "TypeML grammar for tree-sitter",
     "authors": [
       {
         "name": "Irisu",
