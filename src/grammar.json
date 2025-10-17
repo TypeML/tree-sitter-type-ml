@@ -593,12 +593,16 @@
         }
       ]
     },
+    "impl_operator": {
+      "type": "STRING",
+      "value": "$"
+    },
     "impl_ref": {
       "type": "SEQ",
       "members": [
         {
-          "type": "STRING",
-          "value": "$"
+          "type": "SYMBOL",
+          "name": "impl_operator"
         },
         {
           "type": "SYMBOL",
@@ -721,12 +725,16 @@
         }
       ]
     },
+    "alias_operator": {
+      "type": "STRING",
+      "value": "@"
+    },
     "alias": {
       "type": "SEQ",
       "members": [
         {
-          "type": "STRING",
-          "value": "@"
+          "type": "SYMBOL",
+          "name": "alias_operator"
         },
         {
           "type": "SYMBOL",

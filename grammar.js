@@ -102,7 +102,8 @@ module.exports = grammar({
         "}",
       ),
 
-    impl_ref: ($) => seq("$", $.type_identifier),
+    impl_operator: ($) => "$",
+    impl_ref: ($) => seq($.impl_operator, $.type_identifier),
     expr: ($) =>
       seq(
         "{",
@@ -124,7 +125,8 @@ module.exports = grammar({
       ),
     attribute: ($) => seq($.field_identifier, "=", $.attribute_value),
 
-    alias: ($) => seq("@", $.type_identifier),
+    alias_operator: ($) => "@",
+    alias: ($) => seq($.alias_operator, $.type_identifier),
     empty_tag: ($) =>
       seq(
         "<",

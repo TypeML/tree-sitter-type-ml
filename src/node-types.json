@@ -9,9 +9,13 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "alias_operator",
+          "named": true
+        },
         {
           "type": "type_identifier",
           "named": true
@@ -326,13 +330,22 @@
     }
   },
   {
+    "type": "impl_operator",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "impl_ref",
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "impl_operator",
+          "named": true
+        },
         {
           "type": "type_identifier",
           "named": true
@@ -609,16 +622,16 @@
     "named": false
   },
   {
-    "type": "@",
-    "named": false
-  },
-  {
     "type": "[",
     "named": false
   },
   {
     "type": "]",
     "named": false
+  },
+  {
+    "type": "alias_operator",
+    "named": true
   },
   {
     "type": "comment_line",
