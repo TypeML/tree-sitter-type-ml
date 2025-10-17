@@ -36,7 +36,10 @@ module.exports = grammar({
         seq(
           "#",
           field("name", /[a-zA-Z0-9_]+/),
-          optional(choice($.absolute_path, $.relative_path, $.constant)),
+          field(
+            "value",
+            optional(choice($.absolute_path, $.relative_path, $.constant)),
+          ),
           "\n",
         ),
       ),
@@ -45,39 +48,26 @@ module.exports = grammar({
     relative_path: ($) => seq('"', /[^"]+/, '"'),
     constant: ($) => /[a-zA-Z0-9_]+/,
 
+    identifier: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
+
     bind_operator: ($) => seq("-", ">"),
 
     full_type_identifier: ($) =>
-      seq(repeat(seq(/[a-zA-Z_][a-zA-Z0-9_]*/, "::")), $.type_identifier),
-    type_identifier: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
-    field_identifier: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
-
-    struct_field_value: ($) =>
-      choice($.boolean, $.float, $.integer, $.string, $.enum, $.custom_enum),
-    struct_field: ($) => seq($.field_identifier, ":", $.struct_field_value),
-    struct_fields: ($) =>
-      seq($.struct_field, repeat(seq(",", $.struct_field)), optional(",")),
-    struct_impl_keyword: ($) => seq("$", "struct"),
-    struct_impl: ($) =>
       seq(
-        $.struct_impl_keyword,
-        $.type_identifier,
-        $.bind_operator,
-        $.full_type_identifier,
-        "{",
-        field("fields", $.struct_fields),
-        "}",
+        field("module", repeat(seq(/[a-zA-Z_][a-zA-Z0-9_]*/, "::"))),
+        field("type", $.identifier),
       ),
 
     list: ($) =>
       seq(
         "[",
-        $.expr_field_value,
-        repeat(seq(",", $.expr_field_value)),
+        $.field_value,
+        repeat(seq(",", $.field_value)),
         optional(","),
         "]",
       ),
-    expr_field_value: ($) =>
+
+    field_value: ($) =>
       choice(
         $.boolean,
         $.float,
@@ -87,30 +77,44 @@ module.exports = grammar({
         $.custom_enum,
         $.list,
       ),
-    expr_field: ($) => seq($.field_identifier, ":", $.expr_field_value),
-    expr_fields: ($) =>
-      seq($.expr_field, repeat(seq(",", $.expr_field)), optional(",")),
+
+    field: ($) =>
+      seq(
+        field("field_identifier", $.identifier),
+        ":",
+        field("field_value", $.field_value),
+      ),
+    fields: ($) => seq($.field, repeat(seq(",", $.field)), optional(",")),
+
+    struct_impl_keyword: ($) => seq("$", "struct"),
+    struct_impl: ($) =>
+      seq(
+        $.struct_impl_keyword,
+        field("identifier", $.identifier),
+        $.bind_operator,
+        field("bind", $.full_type_identifier),
+        "{",
+        field("fields", $.fields),
+        "}",
+      ),
+
     expr_impl_keyword: ($) => seq("$", "expr"),
     expr_impl: ($) =>
       seq(
         $.expr_impl_keyword,
-        $.type_identifier,
+        field("identifier", $.identifier),
         $.bind_operator,
-        $.full_type_identifier,
+        field("bind", $.full_type_identifier),
         "{",
-        optional(field("fields", $.expr_fields)),
+        optional(field("fields", $.fields)),
         "}",
       ),
 
     impl_operator: ($) => "$",
-    impl_ref: ($) => seq($.impl_operator, $.type_identifier),
+    impl_ref: ($) => seq($.impl_operator, field("identifier", $.identifier)),
     expr: ($) =>
-      seq(
-        "{",
-        choice(seq($.full_type_identifier, $.expr_fields), $.impl_ref),
-        "}",
-      ),
-    struct: ($) => seq("{{", choice($.struct_fields, $.impl_ref), "}}"),
+      seq("{", choice(seq($.full_type_identifier, $.fields), $.impl_ref), "}"),
+    struct: ($) => seq("{{", choice($.fields, $.impl_ref), "}}"),
 
     attribute_value: ($) =>
       choice(
@@ -120,17 +124,23 @@ module.exports = grammar({
         $.string,
         $.enum,
         $.custom_enum,
+        $.list,
         $.expr,
         $.struct,
       ),
-    attribute: ($) => seq($.field_identifier, "=", $.attribute_value),
+    attribute: ($) =>
+      seq(
+        field("identifier", $.identifier),
+        "=",
+        field("value", $.attribute_value),
+      ),
 
     alias_operator: ($) => "@",
-    alias: ($) => seq($.alias_operator, $.type_identifier),
+    alias: ($) => seq($.alias_operator, $.identifier),
     empty_tag: ($) =>
       seq(
         "<",
-        $.full_type_identifier,
+        field("empty_tag", $.full_type_identifier),
         optional($.alias),
         repeat($.attribute),
         "/>",
@@ -139,13 +149,13 @@ module.exports = grammar({
     tag: ($) =>
       seq(
         "<",
-        $.full_type_identifier,
+        field("open_tag", $.full_type_identifier),
         optional($.alias),
         repeat($.attribute),
         ">",
         repeat($.element),
         "</",
-        $.full_type_identifier,
+        field("close_tag", $.full_type_identifier),
         ">",
       ),
 
