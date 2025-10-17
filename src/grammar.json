@@ -134,7 +134,7 @@
     },
     "custom_enum": {
       "type": "PATTERN",
-      "value": "[^\"{}\\[\\],\\/=> \\s\\t\\r\\n]+"
+      "value": "[^\"${}\\[\\],\\/=> \\s\\t\\r\\n]+"
     },
     "directive": {
       "type": "PREC_RIGHT",
@@ -323,6 +323,27 @@
         }
       ]
     },
+    "impl_ref": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "operator",
+          "content": {
+            "type": "STRING",
+            "value": "$"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "identifier",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        }
+      ]
+    },
     "field_value": {
       "type": "CHOICE",
       "members": [
@@ -353,6 +374,10 @@
         {
           "type": "SYMBOL",
           "name": "list"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "impl_ref"
         }
       ]
     },
@@ -542,27 +567,6 @@
         }
       ]
     },
-    "impl_operator": {
-      "type": "STRING",
-      "value": "$"
-    },
-    "impl_ref": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "impl_operator"
-        },
-        {
-          "type": "FIELD",
-          "name": "identifier",
-          "content": {
-            "type": "SYMBOL",
-            "name": "identifier"
-          }
-        }
-      ]
-    },
     "expr": {
       "type": "SEQ",
       "members": [
@@ -571,26 +575,12 @@
           "value": "{"
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "full_type_identifier"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "fields"
-                }
-              ]
-            },
-            {
-              "type": "SYMBOL",
-              "name": "impl_ref"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "full_type_identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "fields"
         },
         {
           "type": "STRING",
@@ -606,17 +596,8 @@
           "value": "{{"
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "fields"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "impl_ref"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "fields"
         },
         {
           "type": "STRING",
@@ -654,6 +635,10 @@
         {
           "type": "SYMBOL",
           "name": "list"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "impl_ref"
         },
         {
           "type": "SYMBOL",

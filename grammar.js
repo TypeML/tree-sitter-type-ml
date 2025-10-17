@@ -28,7 +28,7 @@ module.exports = grammar({
     boolean: ($) => choice("true", "false"),
     string: ($) => seq('"', /[^"]*/, '"'),
     enum: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
-    custom_enum: ($) => /[^"{}\[\],\/=> \s\t\r\n]+/,
+    custom_enum: ($) => /[^"${}\[\],\/=> \s\t\r\n]+/,
 
     directive: ($) =>
       prec.right(
@@ -67,6 +67,9 @@ module.exports = grammar({
         "]",
       ),
 
+    impl_ref: ($) =>
+      seq(field("operator", "$"), field("identifier", $.identifier)),
+
     field_value: ($) =>
       choice(
         $.boolean,
@@ -76,6 +79,7 @@ module.exports = grammar({
         $.enum,
         $.custom_enum,
         $.list,
+        $.impl_ref,
       ),
 
     field: ($) =>
@@ -110,11 +114,8 @@ module.exports = grammar({
         "}",
       ),
 
-    impl_operator: ($) => "$",
-    impl_ref: ($) => seq($.impl_operator, field("identifier", $.identifier)),
-    expr: ($) =>
-      seq("{", choice(seq($.full_type_identifier, $.fields), $.impl_ref), "}"),
-    struct: ($) => seq("{{", choice($.fields, $.impl_ref), "}}"),
+    expr: ($) => seq("{", $.full_type_identifier, $.fields, "}"),
+    struct: ($) => seq("{{", $.fields, "}}"),
 
     attribute_value: ($) =>
       choice(
@@ -125,6 +126,7 @@ module.exports = grammar({
         $.enum,
         $.custom_enum,
         $.list,
+        $.impl_ref,
         $.expr,
         $.struct,
       ),

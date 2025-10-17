@@ -78,6 +78,10 @@
           "named": true
         },
         {
+          "type": "impl_ref",
+          "named": true
+        },
+        {
           "type": "integer",
           "named": true
         },
@@ -204,10 +208,6 @@
         {
           "type": "full_type_identifier",
           "named": true
-        },
-        {
-          "type": "impl_ref",
-          "named": true
         }
       ]
     }
@@ -318,6 +318,10 @@
           "named": true
         },
         {
+          "type": "impl_ref",
+          "named": true
+        },
+        {
           "type": "integer",
           "named": true
         },
@@ -379,11 +383,6 @@
     "fields": {}
   },
   {
-    "type": "impl_operator",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "impl_ref",
     "named": true,
     "fields": {
@@ -396,17 +395,17 @@
             "named": true
           }
         ]
+      },
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "$",
+            "named": false
+          }
+        ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "impl_operator",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -472,10 +471,6 @@
       "types": [
         {
           "type": "fields",
-          "named": true
-        },
-        {
-          "type": "impl_ref",
           "named": true
         }
       ]
