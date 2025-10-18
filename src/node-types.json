@@ -24,6 +24,71 @@
     }
   },
   {
+    "type": "alias_operator",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "annotation",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "any_value",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "any_value",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "array",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "array",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "full_type_identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "attribute",
     "named": true,
     "fields": {
@@ -62,15 +127,15 @@
           "named": true
         },
         {
-          "type": "custom_enum",
+          "type": "custom_enum_variant_value",
           "named": true
         },
         {
-          "type": "enum",
+          "type": "enum_variant_value",
           "named": true
         },
         {
-          "type": "expr",
+          "type": "expression_inline_impl",
           "named": true
         },
         {
@@ -94,50 +159,16 @@
           "named": true
         },
         {
-          "type": "struct",
+          "type": "struct_inline_impl",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "bind_operator",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "boolean",
     "named": true,
     "fields": {}
-  },
-  {
-    "type": "constant",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "directive",
-    "named": true,
-    "fields": {
-      "value": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "absolute_path",
-            "named": true
-          },
-          {
-            "type": "constant",
-            "named": true
-          },
-          {
-            "type": "relative_path",
-            "named": true
-          }
-        ]
-      }
-    }
   },
   {
     "type": "element",
@@ -153,6 +184,54 @@
         },
         {
           "type": "tag",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "element_definition",
+    "named": true,
+    "fields": {
+      "bind": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "full_type_identifier",
+            "named": true
+          }
+        ]
+      },
+      "identifier": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "annotation",
+          "named": true
+        },
+        {
+          "type": "element_keyword",
+          "named": true
+        },
+        {
+          "type": "fields_definition",
+          "named": true
+        },
+        {
+          "type": "metadata_list",
           "named": true
         }
       ]
@@ -189,12 +268,90 @@
     }
   },
   {
-    "type": "enum",
+    "type": "enum_definition",
+    "named": true,
+    "fields": {
+      "identifier": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "annotation",
+          "named": true
+        },
+        {
+          "type": "enum_keyword",
+          "named": true
+        },
+        {
+          "type": "enum_variants",
+          "named": true
+        },
+        {
+          "type": "metadata_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "enum_variant",
+    "named": true,
+    "fields": {
+      "identifier": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "inner_type": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "full_type_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "annotation",
+          "named": true
+        },
+        {
+          "type": "metadata_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "enum_variant_value",
     "named": true,
     "fields": {}
   },
   {
-    "type": "expr",
+    "type": "enum_variants",
     "named": true,
     "fields": {},
     "children": {
@@ -202,18 +359,52 @@
       "required": true,
       "types": [
         {
-          "type": "fields",
-          "named": true
-        },
-        {
-          "type": "full_type_identifier",
+          "type": "enum_variant",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "expr_impl",
+    "type": "expression_definition",
+    "named": true,
+    "fields": {
+      "identifier": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "annotation",
+          "named": true
+        },
+        {
+          "type": "expression_keyword",
+          "named": true
+        },
+        {
+          "type": "fields_definition",
+          "named": true
+        },
+        {
+          "type": "metadata_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "expression_impl",
     "named": true,
     "fields": {
       "bind": {
@@ -231,7 +422,7 @@
         "required": false,
         "types": [
           {
-            "type": "fields",
+            "type": "fields_impl",
             "named": true
           }
         ]
@@ -252,23 +443,82 @@
       "required": true,
       "types": [
         {
-          "type": "bind_operator",
+          "type": "expression_impl_keyword",
           "named": true
         },
         {
-          "type": "expr_impl_keyword",
+          "type": "impl_bind_operator",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "expr_impl_keyword",
+    "type": "expression_impl_keyword",
     "named": true,
     "fields": {}
   },
   {
-    "type": "field",
+    "type": "expression_inline_impl",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "fields_impl",
+          "named": true
+        },
+        {
+          "type": "full_type_identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "field_definition",
+    "named": true,
+    "fields": {
+      "field_identifier": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "field_type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "full_type_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "annotation",
+          "named": true
+        },
+        {
+          "type": "metadata_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "field_impl",
     "named": true,
     "fields": {
       "field_identifier": {
@@ -306,19 +556,15 @@
           "named": true
         },
         {
-          "type": "custom_enum",
+          "type": "custom_enum_variant_value",
           "named": true
         },
         {
-          "type": "enum",
+          "type": "enum_variant_value",
           "named": true
         },
         {
           "type": "float",
-          "named": true
-        },
-        {
-          "type": "impl_ref",
           "named": true
         },
         {
@@ -337,7 +583,7 @@
     }
   },
   {
-    "type": "fields",
+    "type": "fields_definition",
     "named": true,
     "fields": {},
     "children": {
@@ -345,7 +591,22 @@
       "required": true,
       "types": [
         {
-          "type": "field",
+          "type": "field_definition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "fields_impl",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "field_impl",
           "named": true
         }
       ]
@@ -355,6 +616,16 @@
     "type": "full_type_identifier",
     "named": true,
     "fields": {
+      "generic_type": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "generic_identifier",
+            "named": true
+          }
+        ]
+      },
       "module": {
         "multiple": true,
         "required": false,
@@ -367,7 +638,7 @@
       },
       "type": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "identifier",
@@ -378,7 +649,107 @@
     }
   },
   {
+    "type": "generic_identifier",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "full_type_identifier",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "group_bind",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "annotation",
+          "named": true
+        },
+        {
+          "type": "full_type_identifier",
+          "named": true
+        },
+        {
+          "type": "group_count",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "group_count",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "integer",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "group_definition",
+    "named": true,
+    "fields": {
+      "identifier": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "annotation",
+          "named": true
+        },
+        {
+          "type": "group_bind",
+          "named": true
+        },
+        {
+          "type": "group_keyword",
+          "named": true
+        },
+        {
+          "type": "metadata_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "identifier",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "impl_bind_operator",
     "named": true,
     "fields": {}
   },
@@ -409,6 +780,11 @@
     }
   },
   {
+    "type": "library_directive",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "list",
     "named": true,
     "fields": {},
@@ -418,6 +794,55 @@
       "types": [
         {
           "type": "field_value",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "metadata",
+    "named": true,
+    "fields": {
+      "identifier": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "any_value",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "metadata_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "metadata",
           "named": true
         }
       ]
@@ -438,19 +863,43 @@
       "required": false,
       "types": [
         {
-          "type": "directive",
-          "named": true
-        },
-        {
           "type": "element",
           "named": true
         },
         {
-          "type": "expr_impl",
+          "type": "element_definition",
+          "named": true
+        },
+        {
+          "type": "enum_definition",
+          "named": true
+        },
+        {
+          "type": "expression_definition",
+          "named": true
+        },
+        {
+          "type": "expression_impl",
+          "named": true
+        },
+        {
+          "type": "group_definition",
+          "named": true
+        },
+        {
+          "type": "library_directive",
+          "named": true
+        },
+        {
+          "type": "struct_definition",
           "named": true
         },
         {
           "type": "struct_impl",
+          "named": true
+        },
+        {
+          "type": "use_directive",
           "named": true
         }
       ]
@@ -462,15 +911,38 @@
     "fields": {}
   },
   {
-    "type": "struct",
+    "type": "struct_definition",
     "named": true,
-    "fields": {},
+    "fields": {
+      "identifier": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
-          "type": "fields",
+          "type": "annotation",
+          "named": true
+        },
+        {
+          "type": "fields_definition",
+          "named": true
+        },
+        {
+          "type": "metadata_list",
+          "named": true
+        },
+        {
+          "type": "struct_keyword",
           "named": true
         }
       ]
@@ -495,7 +967,7 @@
         "required": true,
         "types": [
           {
-            "type": "fields",
+            "type": "fields_impl",
             "named": true
           }
         ]
@@ -516,7 +988,7 @@
       "required": true,
       "types": [
         {
-          "type": "bind_operator",
+          "type": "impl_bind_operator",
           "named": true
         },
         {
@@ -528,6 +1000,26 @@
   },
   {
     "type": "struct_impl_keyword",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "struct_inline_impl",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "fields_impl",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "struct_keyword",
     "named": true,
     "fields": {}
   },
@@ -576,6 +1068,32 @@
     }
   },
   {
+    "type": "use_directive",
+    "named": true,
+    "fields": {
+      "absolute": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "absolute_path",
+            "named": true
+          }
+        ]
+      },
+      "relative": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "relative_path",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "\n",
     "named": false
   },
@@ -589,6 +1107,22 @@
   },
   {
     "type": "$",
+    "named": false
+  },
+  {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": ")",
+    "named": false
+  },
+  {
+    "type": "*",
+    "named": false
+  },
+  {
+    "type": "+",
     "named": false
   },
   {
@@ -612,6 +1146,10 @@
     "named": false
   },
   {
+    "type": ";",
+    "named": false
+  },
+  {
     "type": "<",
     "named": false
   },
@@ -628,16 +1166,20 @@
     "named": false
   },
   {
+    "type": "?",
+    "named": false
+  },
+  {
+    "type": "@",
+    "named": false
+  },
+  {
     "type": "[",
     "named": false
   },
   {
     "type": "]",
     "named": false
-  },
-  {
-    "type": "alias_operator",
-    "named": true
   },
   {
     "type": "comment_line",
@@ -650,12 +1192,24 @@
     "extra": true
   },
   {
-    "type": "custom_enum",
+    "type": "custom_enum_variant_value",
+    "named": true
+  },
+  {
+    "type": "element_keyword",
+    "named": true
+  },
+  {
+    "type": "enum_keyword",
     "named": true
   },
   {
     "type": "expr",
     "named": false
+  },
+  {
+    "type": "expression_keyword",
+    "named": true
   },
   {
     "type": "false",
@@ -666,8 +1220,16 @@
     "named": true
   },
   {
+    "type": "group_keyword",
+    "named": true
+  },
+  {
     "type": "integer",
     "named": true
+  },
+  {
+    "type": "library",
+    "named": false
   },
   {
     "type": "struct",
@@ -675,6 +1237,10 @@
   },
   {
     "type": "true",
+    "named": false
+  },
+  {
+    "type": "use",
     "named": false
   },
   {
