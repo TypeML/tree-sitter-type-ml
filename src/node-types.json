@@ -780,17 +780,9 @@
         ]
       },
       "value": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
-          {
-            "type": "(",
-            "named": false
-          },
-          {
-            "type": ")",
-            "named": false
-          },
           {
             "type": "field_value",
             "named": true

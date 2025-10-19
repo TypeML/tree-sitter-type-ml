@@ -397,25 +397,25 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "value",
-              "content": {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "STRING",
-                    "value": "("
-                  },
-                  {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "("
+                },
+                {
+                  "type": "FIELD",
+                  "name": "value",
+                  "content": {
                     "type": "SYMBOL",
                     "name": "field_value"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": ")"
                   }
-                ]
-              }
+                },
+                {
+                  "type": "STRING",
+                  "value": ")"
+                }
+              ]
             },
             {
               "type": "BLANK"
