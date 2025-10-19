@@ -185,6 +185,10 @@
         }
       ]
     },
+    "string_inner_value": {
+      "type": "PATTERN",
+      "value": "[^\"]*"
+    },
     "string": {
       "type": "SEQ",
       "members": [
@@ -193,8 +197,12 @@
           "value": "\""
         },
         {
-          "type": "PATTERN",
-          "value": "[^\"]*"
+          "type": "FIELD",
+          "name": "inner_value",
+          "content": {
+            "type": "SYMBOL",
+            "name": "string_inner_value"
+          }
         },
         {
           "type": "STRING",

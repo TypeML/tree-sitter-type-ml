@@ -47,7 +47,8 @@ module.exports = grammar({
         ),
       ),
 
-    string: ($) => seq('"', /[^"]*/, '"'),
+    string_inner_value: ($) => /[^"]*/,
+    string: ($) => seq('"', field("inner_value", $.string_inner_value), '"'),
     array: ($) =>
       seq(
         "[",

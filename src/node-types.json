@@ -866,7 +866,18 @@
   {
     "type": "string",
     "named": true,
-    "fields": {}
+    "fields": {
+      "inner_value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string_inner_value",
+            "named": true
+          }
+        ]
+      }
+    }
   },
   {
     "type": "struct_definition",
@@ -1188,6 +1199,10 @@
   {
     "type": "library",
     "named": false
+  },
+  {
+    "type": "string_inner_value",
+    "named": true
   },
   {
     "type": "struct",
