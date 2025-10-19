@@ -12,7 +12,7 @@ module.exports = grammar({
 
   extras: ($) => [/[\s\t\r\n]/, $.comment_multi, $.comment_line],
 
-  conflicts: ($) => [[$.annotation]],
+  //conflicts: ($) => [[$.annotation]],
 
   rules: {
     source_file: ($) =>
@@ -81,13 +81,13 @@ module.exports = grammar({
       seq(
         "@",
         field("name", $.identifier),
-        optional(field("value", $.field_value)),
+        optional(field("value", $.addition_value)),
       ),
 
     metadata: ($) =>
       seq(
         field("identifier", $.identifier),
-        optional(seq("(", field("value", $.field_value), ")")),
+        optional(seq("(", field("value", $.addition_value), ")")),
       ),
     metadata_list: ($) =>
       seq(
@@ -234,6 +234,17 @@ module.exports = grammar({
         $.custom_enum_variant_value,
         $.list,
         //$.impl_ref,
+      ),
+
+    addition_value: ($) =>
+      choice(
+        $.boolean,
+        $.float,
+        $.integer,
+        $.string,
+        seq("$", $.enum_variant_value),
+        seq("$", $.custom_enum_variant_value),
+        $.list,
       ),
 
     field_impl: ($) =>

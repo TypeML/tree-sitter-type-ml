@@ -5,6 +5,45 @@
     "fields": {}
   },
   {
+    "type": "addition_value",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "boolean",
+          "named": true
+        },
+        {
+          "type": "custom_enum_variant_value",
+          "named": true
+        },
+        {
+          "type": "enum_variant_value",
+          "named": true
+        },
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "list",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "alias",
     "named": true,
     "fields": {},
@@ -47,7 +86,7 @@
         "required": false,
         "types": [
           {
-            "type": "field_value",
+            "type": "addition_value",
             "named": true
           }
         ]
@@ -784,7 +823,7 @@
         "required": false,
         "types": [
           {
-            "type": "field_value",
+            "type": "addition_value",
             "named": true
           }
         ]
