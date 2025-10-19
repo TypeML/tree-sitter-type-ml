@@ -636,8 +636,8 @@
         "required": false,
         "types": [
           {
-            "type": "::",
-            "named": false
+            "type": "module_path",
+            "named": true
           }
         ]
       },
@@ -857,6 +857,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "module_path",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "relative_path",

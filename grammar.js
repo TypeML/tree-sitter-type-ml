@@ -38,9 +38,11 @@ module.exports = grammar({
     identifier: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
     generic_identifier: ($) =>
       seq($.identifier, "<", $.full_type_identifier, ">"),
+
+    module_path: ($) => seq(/[a-zA-Z_][a-zA-Z0-9_]*/, "::"),
     full_type_identifier: ($) =>
       seq(
-        field("module", repeat(seq(/[a-zA-Z_][a-zA-Z0-9_]*/, "::"))),
+        field("module", repeat($.module_path)),
         choice(
           field("type", $.identifier),
           field("generic_type", $.generic_identifier),
