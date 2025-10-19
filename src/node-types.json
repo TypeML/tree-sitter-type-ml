@@ -823,7 +823,7 @@
         "required": false,
         "types": [
           {
-            "type": "addition_value",
+            "type": "field_value",
             "named": true
           }
         ]

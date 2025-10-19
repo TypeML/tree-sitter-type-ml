@@ -87,7 +87,7 @@ module.exports = grammar({
     metadata: ($) =>
       seq(
         field("identifier", $.identifier),
-        optional(seq("(", field("value", $.addition_value), ")")),
+        optional(seq("(", field("value", $.field_value), ")")),
       ),
     metadata_list: ($) =>
       seq(
