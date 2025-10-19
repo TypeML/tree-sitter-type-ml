@@ -110,8 +110,8 @@ module.exports = grammar({
       seq(
         repeat($.annotation),
         "+",
-        $.full_type_identifier,
-        optional($.group_count),
+        field("identifier", $.full_type_identifier),
+        field("count", optional($.group_count)),
       ),
     group_definition: ($) =>
       seq(

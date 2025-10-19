@@ -675,21 +675,34 @@
   {
     "type": "group_bind",
     "named": true,
-    "fields": {},
+    "fields": {
+      "count": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "group_count",
+            "named": true
+          }
+        ]
+      },
+      "identifier": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "full_type_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "annotation",
-          "named": true
-        },
-        {
-          "type": "full_type_identifier",
-          "named": true
-        },
-        {
-          "type": "group_count",
           "named": true
         }
       ]
