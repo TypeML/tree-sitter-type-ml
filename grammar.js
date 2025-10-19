@@ -12,6 +12,8 @@ module.exports = grammar({
 
   extras: ($) => [/[\s\t\r\n]/, $.comment_multi, $.comment_line],
 
+  conflicts: ($) => [[$.annotation]],
+
   rules: {
     source_file: ($) =>
       repeat(
@@ -74,18 +76,17 @@ module.exports = grammar({
 
     library_directive: ($) => seq("#", "library", "\n"),
 
-    any_value: ($) => choice($.string, $.array),
     annotation: ($) =>
       seq(
         "@",
         field("name", $.identifier),
-        optional(field("value", $.any_value)),
+        optional(field("value", $.field_value)),
       ),
 
     metadata: ($) =>
       seq(
         field("identifier", $.identifier),
-        optional(field("value", seq("(", $.any_value, ")"))),
+        optional(field("value", seq("(", $.field_value, ")"))),
       ),
     metadata_list: ($) =>
       seq(
